@@ -11,3 +11,17 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+
+model Round {
+  id Int @id @default(autoincrement())      // Round ID
+  userId Int                                // User linked to round
+  courseName String                         // Course played at
+  datePlayed DateTime                       // Date played
+  totalScore Int                            // Total round score
+  scoreRelativeToPar Int                    // How much over/under par
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
