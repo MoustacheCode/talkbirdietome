@@ -12,7 +12,7 @@
     "keywords": [],
     "author": "",
     "license": "ISC",
-    "type": "commonjs",
+    "type": "module",
     "dependencies": {
         "@hapi/hapi": "^21.4.10",
         "dotenv": "^17.4.2"
