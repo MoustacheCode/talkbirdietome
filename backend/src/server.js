@@ -14,6 +14,9 @@ const init = async () => {
         host: "localhost",
     });
 
+    // Temp to check why Prisma is not connecting to the database, will be removed later
+    console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
     // Health check endpoint to see if server is running
     server.route({
         method: "GET",
