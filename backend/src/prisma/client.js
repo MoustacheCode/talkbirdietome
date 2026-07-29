@@ -1,7 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+const { PrismaClient } = pkg;
 
-// Creates a new instance of prismaclient
+// Creates a new instance of the PrismaClient
 const prisma = new PrismaClient();
 
-// Exports the prisma instance for use in other files
-export default prisma;
+export default prisma; // Exports the prisma client so it can be used in other files
