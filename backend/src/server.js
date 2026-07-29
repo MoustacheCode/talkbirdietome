@@ -1,6 +1,8 @@
 // Imports Hapi and dotenv modules
 import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
+// Imports the round routes
+import roundRoutes from "./routes/roundRoutes.js";
 
 // Loads variables from .env
 dotenv.config();
@@ -20,6 +22,10 @@ const init = async () => {
             return { status: "ok" };
         },
     });
+
+    // Adds the round routes to the server
+    server.route(roundRoutes);
+
     // Starts server and console log to show server is running
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
