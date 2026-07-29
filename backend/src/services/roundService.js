@@ -1,4 +1,4 @@
-import { prisma } from "../prismaClient.js";
+import { prisma } from "../prisma/client.js"; // Imports the prisma client to interact with the database
 
 export const roundService = {
     getAllRounds: async () => {
