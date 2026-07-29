@@ -1,9 +1,16 @@
-import express from "express";
-import { roundController } from "../controllers/roundController.js";
+import { roundController } from "../controllers/roundController.js"; // Imports controller so it can be called in the routes
 
-const router = express.Router();
+const roundRoutes = [
+    {
+        method: "GET",
+        path: "/rounds",
+        handler: roundController.getRounds, // Calls the getRounds function from the controller
+    },
+    {
+        method: "POST",
+        path: "/rounds",
+        handler: roundController.createRound, // Calls the createRound function from the controller
+    },
+];
 
-router.get("/", roundController.getRounds); // Route to get all rounds
-router.post("/", roundController.createRound); // Route to create a new round
-
-export default router;
+export default roundRoutes; // Exports the routes so they can be used in the server.js file
