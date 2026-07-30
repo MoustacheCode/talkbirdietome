@@ -1,27 +1,27 @@
-import { roundService } from "../src/services/roundService.js";
-import prisma from "../src/prisma/client.js"; // Import the prisma client to interact with the database
+import { jest } from "@jest/globals";
 
+// Mock Prisma client
 jest.unstable_mockModule("../src/prisma/client.js", () => ({
-    // Mock Prisma client to avoid actual database calls during testing
-    round: {
-        findMany: jest.fn(),
-        create: jest.fn(),
-        update: jest.fn(),
-        delete: jest.fn(),
+    default: {
+        round: {
+            findMany: jest.fn(),
+            create: jest.fn(),
+            update: jest.fn(),
+            delete: jest.fn(),
+        },
     },
 }));
 
-// Tests for the roundService functions using AAA pattern (Arrange, Act, Assert)
+const prisma = (await import("../src/prisma/client.js")).default;
+const { roundService } = await import("../src/services/roundService.js");
 
+// Tests for roundService
 describe("roundService", () => {
-    test("getAllRounds to return list of rounds", async () => {
-        // Arrange: fake the return value of prisma.round.findMany to simulate database response
+    test("getAllRounds to return all rounds", async () => {
         prisma.round.findMany.mockResolvedValue([{ id: 1, name: "Round 1" }]);
 
-        // Act: call the function being tested
         const result = await roundService.getAllRounds();
 
-        // Assert: confirm the expected outcome
         expect(result).toEqual([{ id: 1, name: "Round 1" }]);
     });
 });
