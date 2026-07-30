@@ -7,7 +7,9 @@ export const roundController = {
             return h.response(rounds).code(200); // Returns the rounds with a 200 status code
         } catch (error) {
             console.error(error);
-            return h.response({ error: "Failed to fetch rounds" }).code(500); // Retuns an error response with a 500 status code
+            return h
+                .response({ error: "This round was lost in the trees" })
+                .code(500); // Retuns an error response with a 500 status code
         }
     },
 
@@ -17,7 +19,11 @@ export const roundController = {
             return h.response(newRound).code(201); // Returns the newly created round with a 201 status code
         } catch (error) {
             console.error(error);
-            return h.response({ error: "Failed to create round" }).code(500); // Returns an error response with a 500 status code
+            return h
+                .response({
+                    error: "Couldn't create the round - it sliced way off into the rough",
+                })
+                .code(500); // Returns an error response with a 500 status code
         }
     },
 
