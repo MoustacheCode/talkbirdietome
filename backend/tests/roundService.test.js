@@ -1,7 +1,7 @@
-import { roundService } from "../services/roundService.js";
-import prisma from "../prisma/client.js"; // Import the prisma client to interact with the database
+import { roundService } from "../src/services/roundService.js";
+import prisma from "../src/prisma/client.js"; // Import the prisma client to interact with the database
 
-jest.mock("../prisma/client.js", () => ({
+jest.unstable_mockModule("../src/prisma/client.js", () => ({
     // Mock Prisma client to avoid actual database calls during testing
     round: {
         findMany: jest.fn(),
