@@ -35,4 +35,18 @@ export const roundController = {
                 .code(400); // Returns an error response with a 400 status code
         }
     },
+
+    deleteRound: async (request, h) => {
+        const id = Number(request.paams.id); // Converts the id parameter from the request to a number
+
+        try {
+            await roundService.deleteRound(id); // Calls the deleteRound function from the service with the id
+            return h
+                .response({ message: "FORE! Round deleted successfully" })
+                .code(200); // Returns a success message with a 200 status code
+        } catch (error) {
+            console.error(error);
+            return h.response({ error: "Round deletion failed" }).code(400); // Returns an error response with a 400 status code
+        }
+    },
 };
