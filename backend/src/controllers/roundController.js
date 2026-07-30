@@ -37,7 +37,7 @@ export const roundController = {
     },
 
     deleteRound: async (request, h) => {
-        const id = Number(request.paams.id); // Converts the id parameter from the request to a number
+        const id = Number(request.params.id); // Converts the id parameter from the request to a number
 
         try {
             await roundService.deleteRound(id); // Calls the deleteRound function from the service with the id
