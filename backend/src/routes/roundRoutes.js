@@ -11,6 +11,24 @@ const roundRoutes = [
         path: "/rounds",
         handler: roundController.createRound, // Calls the createRound function from the controller
     },
+
+    {
+        method: "PUT",
+        path: "/rounds/{id}",
+        handler: roundController.updateRound, // Calls the updateRound function from the controller
+        options: {
+            payload: {
+                allow: "application/json", // Specifies that the payload should be in JSON format
+                parse: true,
+            },
+        },
+    },
+
+    {
+        method: "DELETE",
+        path: "/rounds/{id}",
+        handler: roundController.deleteRound, // Calls the deleteRound function from the controller
+    },
 ];
 
 export default roundRoutes; // Exports the routes so they can be used in the server.js file
