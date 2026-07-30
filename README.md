@@ -29,3 +29,19 @@ Confirms the API successfully read data from Supabase
 Confirms a successful insert into the database with Prisma
 
 ![POST rounds](./assets/postman-post.PNG)
+
+## Initial API (DELETE/PUT) Testing
+
+To check the backend setup, I tested DELETE & PUT endpoints using Postman - 30.07.26
+
+### DELETE /rounds/{id}
+
+Confirms round deleted
+
+![DELETE rounds](./assets/postman-delete.PNG)
+
+### PUT /rounds/{id}
+
+Confirms the round was updated successfully
+
+![PUT rounds](./assets/postman-put.PNG)
