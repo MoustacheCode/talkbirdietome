@@ -80,3 +80,20 @@ describe("roundService", () => {
         });
     });
 });
+
+// Test for getRoundById - Returns a round by its ID
+describe("roundService", () => {
+    test("getRoundById to return round by id", async () => {
+        cost roundId = 1;
+        const roundData = { id: 1, name: "Round 1" };
+
+        prisma.round.findUnique.mockResolvedValue(roundData);
+
+        const result = await roundService.getRoundById(1);
+
+        expect(result).toEqual(roundData);
+        expect(prisma.round.findUnique).toHaveBeenCalledWith({
+            where: { id: roundId },
+        });
+    });
+});
