@@ -15,6 +15,7 @@ export const roundController = {
 
     createRound: async (request, h) => {
         try {
+            console.log("PAYLOAD RECEIVED:", request.payload);
             const newRound = await roundService.createRound(request.payload); // Calls the createRound function from the service with the request payload
             return h.response(newRound).code(201); // Returns the newly created round with a 201 status code
         } catch (error) {
