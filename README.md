@@ -49,3 +49,30 @@ Confirms the round was updated successfully
 ## Branch: feature/crud-complete
 
 Initial CRUD work completed
+
+## Testing
+
+The project is using Jest to test service logic.
+Because it's written using ES Modules, the tests use Jest's ESM compatible mocking (jest.unstable.mockModule) and dynamic imports to ensure mocks are applied before the service is loaded.
+
+### Mocking Prisma
+
+This is done to prevent real database calls:
+
+![Prisma Mock](./assets/prisma%20mock.PNG)
+
+### roundService.getAllRounds()
+
+![getAllRounds](./assets/getAllRounds.PNG)
+
+### Testing Notes
+
+- Tests run using the node flag --experimental-vm-modules for Jest's ESM support
+- This setup was implemented with the assistance of Co-Pilot to correctly configure ESM mocking and dynamic imports
+
+The following service methods are fully tested:
+
+- getAllRounds - Returns rounds
+- createRound - Creates round
+- updateRound - Updates round
+- deleteRound - Deletes round
