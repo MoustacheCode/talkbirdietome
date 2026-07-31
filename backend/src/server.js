@@ -8,7 +8,6 @@ import roundRoutes from "./routes/roundRoutes.js";
 dotenv.config();
 
 // Starts server and sets health route
-// Trigger Railway deploy
 const init = async () => {
     const server = Hapi.server({
         port: process.env.PORT || 3000,
