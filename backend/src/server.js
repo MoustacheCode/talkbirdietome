@@ -12,6 +12,12 @@ const init = async () => {
     const server = Hapi.server({
         port: process.env.PORT || 3000,
         host: "0.0.0.0",
+        routes: {
+            payload: {
+                parse: true,
+                allow: "application/json",
+            },
+        },
     });
 
     // Temp to check why Prisma is not connecting to the database, will be removed later
