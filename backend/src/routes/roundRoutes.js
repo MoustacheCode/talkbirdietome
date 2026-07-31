@@ -10,6 +10,12 @@ const roundRoutes = [
         method: "POST",
         path: "/rounds",
         handler: roundController.createRound, // Calls the createRound function from the controller
+        options: {
+            payload: {
+                allow: "application/json",
+                parse: true,
+            },
+        },
     },
 
     {
