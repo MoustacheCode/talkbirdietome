@@ -69,3 +69,10 @@ This is done to prevent real database calls:
 
 - Tests run using the node flag --experimental-vm-modules for Jest's ESM support
 - This setup was implemented with the assistance of Co-Pilot to correctly configure ESM mocking and dynamic imports
+
+The following service methods are fully tested:
+
+- getAllRounds - Returns rounds
+- createRound - Creates round
+- updateRound - Updates round
+- deleteRound - Deletes round
