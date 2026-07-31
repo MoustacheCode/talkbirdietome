@@ -31,7 +31,7 @@ describe("roundService", () => {
         const newRoundData = { name: "Round 2" };
         const createdRound = { id: 2, name: "Round 2" };
 
-        prisma.round.create.mockResolvedValue(createdRount);
+        prisma.round.create.mockResolvedValue(createdRound);
 
         const result = await roundService.createRound(newRoundData);
 
