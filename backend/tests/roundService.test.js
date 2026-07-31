@@ -25,3 +25,19 @@ describe("roundService", () => {
         expect(result).toEqual([{ id: 1, name: "Round 1" }]);
     });
 });
+
+describe("roundService", () => {
+    test("createRound to create new round", async () => {
+        const newRoundData = { name: "Round 2" };
+        const createdRound = { id: 2, name: "Round 2" };
+
+        prisma.round.create.mockResolvedValue(createdRount);
+
+        const result = await roundService.createRound(newRoundData);
+
+        expect(result).toEqual(createdRound);
+        expect(prisma.round.create).toHaveBeenCalledWith({
+            data: newRoundData,
+        });
+    });
+});
