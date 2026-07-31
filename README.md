@@ -76,3 +76,33 @@ The following service methods are fully tested:
 - createRound - Creates round
 - updateRound - Updates round
 - deleteRound - Deletes round
+
+## Backend Deployment Status
+
+The backend API is now deployed and reachable via HTTPS on Railway
+
+Base URL - https://talkbirdietome-production.up.railway.app
+
+### GET /rounds
+
+Returns all ronds stored in the Database
+
+![getRounds](./assets/railway-rounds-get.PNG)
+
+### POST /rounds
+
+Creates a new round
+
+![getRounds](./assets/railway-rounds-post.PNG)
+
+### PUT /rounds/{id}
+
+Updates an existing round
+
+![putRounds](./assets/railway-rounds-put.PNG)
+
+### DELETE /rounds/{id}
+
+Deletes a round
+
+![deleteRounds](./assets/railway-rounds-delete.PNG)
