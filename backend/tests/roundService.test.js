@@ -63,3 +63,20 @@ describe("roundService", () => {
         });
     });
 });
+
+// Test for deleteRound - Deletes an existing round from the database
+describe("roundService", () => {
+    test("deleteRound to delete this round", async () => {
+        const roundId = 1;
+        const deletedRound = { id: 1, name: "Round 1" };
+
+        prisma.round.delete.mockResolvedValue(deletedRound);
+
+        const result = await roundService.deleteRound(roundId);
+
+        expect(result).toEqual(deletedRound);
+        expect(prisma.round.delete).toHaveBeenCalledWith({
+            where: { id: roundId },
+        });
+    });
+});
