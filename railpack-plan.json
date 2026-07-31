@@ -1,0 +1,9 @@
+{
+    "workdir": "backend",
+    "build": {
+        "builder": "node"
+    },
+    "deploy": {
+        "start": "npm run start"
+    }
+}
