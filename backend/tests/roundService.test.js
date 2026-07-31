@@ -16,6 +16,8 @@ const prisma = (await import("../src/prisma/client.js")).default;
 const { roundService } = await import("../src/services/roundService.js");
 
 // Tests for roundService
+
+// Test for getAllRounds - Returns all the rounds from the database
 describe("roundService", () => {
     test("getAllRounds to return all rounds", async () => {
         prisma.round.findMany.mockResolvedValue([{ id: 1, name: "Round 1" }]);
@@ -26,6 +28,7 @@ describe("roundService", () => {
     });
 });
 
+// Test for createRound - Creates a new round in the database
 describe("roundService", () => {
     test("createRound to create new round", async () => {
         const newRoundData = { name: "Round 2" };
@@ -38,6 +41,25 @@ describe("roundService", () => {
         expect(result).toEqual(createdRound);
         expect(prisma.round.create).toHaveBeenCalledWith({
             data: newRoundData,
+        });
+    });
+});
+
+// Test for updateRound - Updates an existing round in the database
+describe("roundService", () => {
+    test("updateRound to update current round", async () => {
+        const roundId = 1;
+        const updateData = { name: "Updated Round 1" };
+        const updatedRound = { id: 1, name: "Updated Round 1" };
+
+        prisma.round.update.mockResolvedValue(updatedRound);
+
+        const result = await roundService.updateRound(roundId, updateData);
+
+        expect(result).toEqual(updatedRound);
+        expect(prisma.round.update).toHaveBeenCalledWith({
+            where: { id: roundId },
+            data: updateData,
         });
     });
 });
