@@ -84,7 +84,7 @@ describe("roundService", () => {
 // Test for getRoundById - Returns a round by its ID
 describe("roundService", () => {
     test("getRoundById to return round by id", async () => {
-        cost roundId = 1;
+        const roundId = 1;
         const roundData = { id: 1, name: "Round 1" };
 
         prisma.round.findUnique.mockResolvedValue(roundData);
