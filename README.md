@@ -106,3 +106,27 @@ Updates an existing round
 Deletes a round
 
 ![deleteRounds](./assets/railway-rounds-delete.PNG)
+
+## Chosen API
+
+### UK Golf Course Data API
+
+![GolfUKApi](./assets/golfukapi.PNG)
+
+### Successful response example
+
+The request returned a list of matching clubs, including:
+
+- Club ID
+- Club name
+- Address
+- Region
+- Country
+- Associated courses
+
+### Why this API?
+
+- Covers 2,600+ UK golf clubs
+- Provides hole data (par, yardage, stroke index)
+- Supports search by location or course name
+- Free tier sufficient for development
