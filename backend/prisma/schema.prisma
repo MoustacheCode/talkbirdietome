@@ -16,6 +16,7 @@ datasource db {
 model Round {
   id Int @id @default(autoincrement())      // Round ID
   userId Int                                // User linked to round
+  user User @relation(fields: [userId], references: [id])
   courseName String                         // Course played at
   datePlayed DateTime                       // Date played
   totalScore Int                            // Total round score
@@ -26,11 +27,12 @@ model Round {
 }
 
 model User {
-  id int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   email String @unique
   passwordHash String
   role String @default("user") // Temporarily a String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   rounds Round[]
 }
