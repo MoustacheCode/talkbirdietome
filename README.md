@@ -130,3 +130,20 @@ The request returned a list of matching clubs, including:
 - Provides hole data (par, yardage, stroke index)
 - Supports search by location or course name
 - Free tier sufficient for development
+
+## Database Migration verification
+
+After running Prisma migrations, the database schema was verified using SQL Editor in Supabase.
+These checks confirm that the "User" and "Round" tables were created correctly and that the foreign key relationship between them is functioning as expected.
+
+Test user was inserted into the database and returned when using a SELECT query:
+
+![testUser](./assets/testuser.PNG)
+
+A test round was then inserted against the user ID of the test user:
+
+![testRound](./assets/testround.PNG)
+
+I then verified the test round by searching from "Round" to check that the test round was stored correctly and can be retrieved:
+
+![testRoundReturned](./assets/testroundreceived.PNG)

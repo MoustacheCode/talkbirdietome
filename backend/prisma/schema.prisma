@@ -10,12 +10,14 @@ generator client {
 datasource db {
   provider = "postgresql"
   url = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 
 model Round {
   id Int @id @default(autoincrement())      // Round ID
   userId Int                                // User linked to round
+  user User @relation(fields: [userId], references: [id])
   courseName String                         // Course played at
   datePlayed DateTime                       // Date played
   totalScore Int                            // Total round score
@@ -25,3 +27,13 @@ model Round {
   updatedAt DateTime @updatedAt
 }
 
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  passwordHash String
+  role String @default("user") // Temporarily a String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rounds Round[]
+}
