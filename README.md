@@ -148,14 +148,19 @@ I then verified the test round by searching from "Round" to check that the test 
 
 ![testRoundReturned](./assets/testroundreceived.PNG)
 
-## Week 2 - User Registration
+## Week 2 - User Registration & Authentication
 
-The first step I've taken was to create the /register endpoint. At this stage, I wired the route up to the controller to return a simple placeholder message, to confirm the endpoint can be reached.
+For this project, I have decided to use Google Authentication through Supabase, instead of building a full manual registration and authentication. As a junior developer building a live app, I wanted something secure, reliable and quick to integrate without adding unnecessary complexity.
 
-### Postman Test
+- Easy to set up
+  As Google auth works straight out of the box, that alleviates time working on login logic, hashing or session handling. Supabase handles all of that.
 
-The /register endpoint was tested using Postman, to check it was active and responding.
+- Security
+  Because I'm not storing passwords myself, I avoid some security risks. Supabase handles the tokens and user sessions.
 
-![Register endpoint test](./assets/register_endpoint.PNG)
+- User experience
+  Most people use Google already, so logging in will become fast and familiar, as well as making the app feel more polished.
 
-The endpoint responded successfully.
+### Summary
+
+I chose Google Auth because it's secure, simple and perfect for getting a live app up and running quickly. It removes a lot of the complexity and lets me focus on building the core functionality of the project.
