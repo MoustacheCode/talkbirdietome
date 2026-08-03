@@ -1,10 +1,10 @@
-import { userController } from '../controllers/userController.js'; // Imports controller so it can be called in the routes
+import { userController } from "../controllers/userController.js"; // Imports controller so it can be called in the routes
 
 const userRoutes = [
     {
-        method: "GET",
+        method: "POST",
         path: "/register",
-        handler: userController.register // Calls the register function from the controller
+        handler: userController.register, // Calls the register function from the controller
         options: {
             payload: {
                 allow: "application/json",
