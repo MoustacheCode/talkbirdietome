@@ -147,3 +147,15 @@ A test round was then inserted against the user ID of the test user:
 I then verified the test round by searching from "Round" to check that the test round was stored correctly and can be retrieved:
 
 ![testRoundReturned](./assets/testroundreceived.PNG)
+
+## Week 2 - User Registration
+
+The first step I've taken was to create the /register endpoint. At this stage, I wired the route up to the controller to return a simple placeholder message, to confirm the endpoint can be reached.
+
+### Postman Test
+
+The /register endpoint was tested using Postman, to check it was active and responding.
+
+![Register endpoint test](./assets/register_endpoint.PNG)
+
+The endpoint responded successfully.

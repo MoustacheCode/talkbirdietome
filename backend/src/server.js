@@ -3,6 +3,7 @@ import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
 // Imports the round routes
 import roundRoutes from "./routes/roundRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 // Loads variables from .env
 dotenv.config();
@@ -31,6 +32,8 @@ const init = async () => {
 
     // Adds the round routes to the server
     server.route(roundRoutes);
+    // Adds the user routes to the server
+    server.route(userRoutes);
 
     // Starts server and console log to show server is running
     await server.start();
