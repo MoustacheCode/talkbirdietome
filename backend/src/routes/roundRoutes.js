@@ -4,6 +4,9 @@ const roundRoutes = [
     {
         method: "GET",
         path: "/rounds",
+        options: {
+            pre: [{ method: verifySupabaseToken }],
+        },
         handler: roundController.getRounds, // Calls the getRounds function from the controller
     },
     {
@@ -11,6 +14,7 @@ const roundRoutes = [
         path: "/rounds",
         handler: roundController.createRound, // Calls the createRound function from the controller
         options: {
+            pre: [{ method: verifySupabaseToken }],
             payload: {
                 allow: "application/json",
                 parse: true,
@@ -23,6 +27,7 @@ const roundRoutes = [
         path: "/rounds/{id}",
         handler: roundController.updateRound, // Calls the updateRound function from the controller
         options: {
+            pre: [{ method: verifySupabaseToken }],
             payload: {
                 allow: "application/json", // Specifies that the payload should be in JSON format
                 parse: true,
@@ -33,6 +38,9 @@ const roundRoutes = [
     {
         method: "DELETE",
         path: "/rounds/{id}",
+        options: {
+            pre: [{ method: verifySupabaseToken }],
+        },
         handler: roundController.deleteRound, // Calls the deleteRound function from the controller
     },
 ];
