@@ -25,6 +25,7 @@
     },
     "devDependencies": {
         "jest": "^29.7.0",
-        "nodemon": "^3.1.14"
+        "nodemon": "^3.1.14",
+        "supabase": "^2.111.0"
     }
 }
