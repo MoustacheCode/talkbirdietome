@@ -6,7 +6,7 @@ describe("Authentication", () => {
     it("rejects invalid tokens", async () => {
         const response = await server.inject({
             method: "GET",
-            path: "/rounds/1",
+            url: "/rounds/1",
             headers: {
                 Authorization: "Bearer invalid.token.value",
             },
@@ -21,7 +21,7 @@ describe("Authentication", () => {
     it("rejects missing tokens", async () => {
         const response = await server.inject({
             method: "GET",
-            path: "/rounds/1",
+            url: "/rounds/1",
         });
 
         expect(response.statusCode).toBe(401);
@@ -46,7 +46,7 @@ describe("Role Permission", () => {
 
         const response = await server.inject({
             method: "GET",
-            path: "/admin/dashboard",
+            url: "/admin/dashboard",
             headers: {
                 Authorization: `Bearer ${adminToken}`,
             },
@@ -64,7 +64,7 @@ describe("Role Permission", () => {
 
         const response = await server.inject({
             method: "GET",
-            path: "/admin/dashboard",
+            url: "/admin/dashboard",
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -93,7 +93,7 @@ describe("Ownership checks", () => {
         // Simulate a round that belongs to another user
         const response = await server.inject({
             method: "PUT",
-            path: "/rounds/999", // Assuming round ID 999 belongs to another user
+            url: "/rounds/999", // Assuming round ID 999 belongs to another user
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -118,7 +118,7 @@ describe("Ownership checks", () => {
         // Simulate a round that belongs to the user
         const response = await server.inject({
             method: "PUT",
-            path: "/rounds/1",
+            url: "/rounds/1",
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -140,7 +140,7 @@ describe("Ownership checks", () => {
         // Admin updating a round that belongs to another user
         const response = await server.inject({
             method: "PUT",
-            path: "/rounds/999",
+            url: "/rounds/999",
             headers: {
                 Authorization: `Bearer ${adminToken}`,
             },
