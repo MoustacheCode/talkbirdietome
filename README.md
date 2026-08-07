@@ -236,3 +236,7 @@ This diagram shows a journey of a request after a user logs in. Supabase proves 
 </pre>
 
 </div>
+
+## Security Test suite
+
+![Securitytestsuite](./assets/securitytests.PNG)
