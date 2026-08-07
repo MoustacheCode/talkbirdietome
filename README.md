@@ -240,3 +240,53 @@ This diagram shows a journey of a request after a user logs in. Supabase proves 
 ## Security Test suite
 
 ![Securitytestsuite](./assets/securitytests.PNG)
+
+## Postman API Test Suite
+
+To make backend testing fast, repeatable and consistent, this project includes a full Postman test suite covering:
+
+- Authentication
+- Authorisation
+- Role based access control
+- Protected routes
+- Admin only endpoints
+
+All collections are stored in the root level /postman directory.
+
+### Importing the Collection
+
+1. Open Postman
+2. Click import
+3. Select the file: /postman/TalkBirdieToMe API.postman_collection.json
+
+The full week 2 auth suite will appear in your Collections panel
+
+### Environment Setup
+
+The collection uses Postman env variables for cleaner requests:
+
+1. Click the Environments tab
+2. Create a new environment
+3. Add:
+    - baseURL: http://localhost:8080
+    - userToken <your generated user JWT>
+    - adminToken <your generated admin JWT>
+
+### Runing the Tests
+
+Each request includes an automated Postman test to validate:
+
+- Missing token → 401 Unauthorized
+- Invalid token → 401 Unauthorized
+- Valid user token → 200 OK
+- User forbidden → 403 Forbidden
+- Admin allowed → 200 OK
+
+To run the entire suite:
+
+1. Open the collection
+2. Click Run Collection
+3. Select your environment
+4. Click Start Run
+
+You’ll get a full pass/fail report for all authentication and authorization scenarios.
