@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import path from "path";
-dotenv.config({ path: path.resolve(process.cwd(), ".env.test") }); // Load test environment variables
+dotenv.config({ path: path.resolve(process.cwd(), "../.env.test") }); // Load test environment variables
 import { server } from "../src/server.js";
 
 // Authentication block for testing the authentication middleware
@@ -17,7 +17,9 @@ describe("Authentication", () => {
 
         expect(response.statusCode).toBe(401);
         expect(JSON.parse(response.payload)).toEqual({
-            error: "Invalid token",
+            statusCode: 401,
+            error: "Unauthorized",
+            message: "Invalid Auth Token",
         });
     });
 
@@ -29,7 +31,9 @@ describe("Authentication", () => {
 
         expect(response.statusCode).toBe(401);
         expect(JSON.parse(response.payload)).toEqual({
-            error: "Missing auth token",
+            statusCode: 401,
+            error: "Unauthorized",
+            message: "Missing Auth Token",
         });
     });
 });
@@ -75,7 +79,9 @@ describe("Role Permission", () => {
 
         expect(response.statusCode).toBe(403);
         expect(JSON.parse(response.payload)).toEqual({
-            error: "2 Stroke penalty: Insufficient permissions",
+            statusCode: 403,
+            error: "Forbidden",
+            message: "2 Stroke penalty: Insufficient permissions",
         });
     });
 });
@@ -107,7 +113,10 @@ describe("Ownership checks", () => {
 
         expect(response.statusCode).toBe(403);
         expect(JSON.parse(response.payload)).toEqual({
-            error: "1 Stroke penalty: You do not have permission to perform this action",
+            statusCode: 403,
+            error: "Forbidden",
+            message:
+                "1 Stroke penalty: You do not have permission to perform this action",
         });
     });
 
