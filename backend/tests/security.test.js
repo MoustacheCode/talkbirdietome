@@ -107,4 +107,48 @@ describe("Ownership checks", () => {
             error: "1 Stroke penalty: You do not have permission to perform this action",
         });
     });
+
+    it("allows user to update their own round", async () => {
+        const userToken = makeToken({
+            sub: "user-123",
+            email: "user@example.com",
+            role: "user",
+        });
+
+        // Simulate a round that belongs to the user
+        const response = await server.inject({
+            method: "PUT",
+            path: "/rounds/1",
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+            payload: {
+                score: 70,
+            },
+        });
+
+        expect(response.statusCode).toBe(200);
+    });
+
+    it("allows admin to update any round", async () => {
+        const adminToken = makeToken({
+            sub: "admin-999",
+            email: "admin@example.com",
+            role: "admin",
+        });
+
+        // Admin updating a round that belongs to another user
+        const response = await server.inject({
+            method: "PUT",
+            path: "/rounds/999",
+            headers: {
+                Authorization: `Bearer ${adminToken}`,
+            },
+            payload: {
+                score: 68,
+            },
+        });
+
+        expect(response.statusCode).toBe(200);
+    });
 });

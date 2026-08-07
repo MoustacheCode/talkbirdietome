@@ -32,9 +32,12 @@ const init = async () => {
     // Adds the round routes to the server
     server.route(roundRoutes);
 
-    // Starts server and console log to show server is running
-    await server.start();
-    console.log(`Server running at: ${server.info.uri}`);
+    // Starts server and console log to show server is running unless in test environment
+    if (process.env.NODE_ENV !== "test") {
+        const start = async () => {
+            await server.start();
+            console.log(`Server running at: ${server.info.uri}`);
+        };
+        start();
+    }
 };
-// Calls init function to start the server
-init();
