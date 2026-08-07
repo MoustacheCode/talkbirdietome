@@ -1,4 +1,5 @@
 import { server } from "../src/server.js";
+import jwt from "jsonwebtoken";
 
 describe("Authentication", () => {
     it("rejects invalid tokens", async () => {
@@ -13,6 +14,18 @@ describe("Authentication", () => {
         expect(response.statusCode).toBe(401);
         expect(JSON.parse(response.payload)).toEqual({
             error: "Invalid token",
+        });
+    });
+
+    it("rejects missing tokens", async () => {
+        const response = await server.inject({
+            method: "GET",
+            path: "/rounds/1",
+        });
+
+        expect(response.statusCode).toBe(401);
+        expect(JSON.parse(response.payload)).toEqual({
+            error: "Missing auth token",
         });
     });
 });
