@@ -3,6 +3,8 @@ import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
 // Imports the round routes
 import roundRoutes from "./routes/roundRoutes.js";
+// Import auth middleware
+import { verifySupabaseToken } from "./middleware/verifySupabaseToken.js";
 
 // Loads variables from .env
 dotenv.config();
@@ -18,6 +20,9 @@ export const server = Hapi.server({
         },
     },
 });
+
+// Reegisters the auth middleware to verify Supabase JWT tokens for all routes
+server.ext("onPreHandler", verifySupabaseToken);
 
 // Health check endpoint to see if server is running
 server.route({
