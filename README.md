@@ -269,8 +269,8 @@ The collection uses Postman env variables for cleaner requests:
 2. Create a new environment
 3. Add:
     - baseURL: http://localhost:8080
-    - userToken <your generated user JWT>
-    - adminToken <your generated admin JWT>
+    - userToken = A generated user JWT
+    - adminToken = A generated admin JWT
 
 ### Runing the Tests
 
