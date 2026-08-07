@@ -55,14 +55,14 @@ const roundRoutes = [
         handler: roundController.deleteRound, // Calls the deleteRound function from the controller
     },
 
-        // Temporary admin route for testing role-based access control
+    // Temporary admin route for testing role-based access control
     {
         method: "GET",
         path: "/admin/dashboard",
         options: {
             pre: [
-                { method: verifySupabaseToken }
-                { method: requireRole("admin") }
+                { method: verifySupabaseToken },
+                { method: requireRole("admin") },
             ],
         },
         handler: () => {
