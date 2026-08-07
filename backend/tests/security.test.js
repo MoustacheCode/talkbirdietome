@@ -30,3 +30,81 @@ describe("Authentication", () => {
         });
     });
 });
+
+// Role Permission block for testing the role-based access control middleware
+describe("Role Permission", () => {
+    function makeToken(payload) {
+        return jwt.sign(payload, process.env.SUPABASE_JWT_SECRET);
+    }
+
+    it("allows admin to access admin routes", async () => {
+        const adminToken = makeToken({
+            sub: "admin-123",
+            email: "admin@example.com",
+            role: "admin",
+        });
+
+        const response = await server.inject({
+            method: "GET",
+            path: "/admin/dashboard",
+            headers: {
+                Authorization: `Bearer ${adminToken}`,
+            },
+        });
+
+        expect(response.statusCode).toBe(200);
+    });
+
+    it("rejects normal users from accessing admin routes", async () => {
+        const userToken = makeToken({
+            sub: "user-456",
+            email: "user@example.com",
+            role: "user",
+        });
+
+        const response = await server.inject({
+            method: "GET",
+            path: "/admin/dashboard",
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+
+        expect(response.statusCode).toBe(403);
+        expect(JSON.parse(response.payload)).toEqual({
+            error: "2 Stroke penalty: Insufficient permissions",
+        });
+    });
+});
+
+// Ownership block for testing the ownership verification middleware
+describe("Ownership checks", () => {
+    function makeToken(payload) {
+        return jwt.sign(payload, process.env.SUPABASE_JWT_SECRET);
+    }
+
+    it("rejects users who do not own the round", async () => {
+        const userToken = makeToken({
+            sub: "user-123",
+            email: "user@example.com",
+            role: "user",
+        });
+
+        // Simulate a round that belongs to another user
+        const response = await server.inject({
+            method: "PUT",
+            path: "/rounds/999", // Assuming round ID 999 belongs to another user
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+            payload: {
+                score: 72,
+            },
+        });
+
+        expect(response.statusCode).toBe(403);
+        expect(JSON.parse(response.payload)).toEqual({
+            error: "1 Stroke penalty: You do not have permission to perform this action",
+        });
+    });
+});
