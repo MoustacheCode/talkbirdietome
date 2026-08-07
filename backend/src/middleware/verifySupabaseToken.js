@@ -23,11 +23,10 @@ export const verifySupabaseToken = async (request, h) => {
         try {
             const payload = decodeJwt(token);
 
-            request.auth = {
-                userId: payload.sub,
-                email: payload.email,
-                role: payload.role,
-            };
+            request.auth = request.auth || {};
+            request.auth.userId = payload.sub;
+            request.auth.email = payload.email;
+            request.auth.role = payload.role;
 
             return h.continue;
         } catch {
@@ -38,11 +37,10 @@ export const verifySupabaseToken = async (request, h) => {
     try {
         const { payload } = await jwtVerify(token, JWKS);
         // Identity fields from Supabase JWT payload
-        request.auth = {
-            userId: payload.sub, //Supabase user ID
-            email: payload.email, //Supabase user email
-            role: payload.role, // Supabase user role
-        };
+        request.auth = request.auth || {};
+        request.auth.userId = payload.sub;
+        request.auth.email = payload.email;
+        request.auth.role = payload.role;
 
         return h.continue;
     } catch (error) {

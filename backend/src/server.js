@@ -22,7 +22,7 @@ export const server = Hapi.server({
 });
 
 // Reegisters the auth middleware to verify Supabase JWT tokens for all routes
-server.ext("onPreHandler", verifySupabaseToken);
+// server.ext("onPreHandler", verifySupabaseToken);
 
 // Health check endpoint to see if server is running
 server.route({

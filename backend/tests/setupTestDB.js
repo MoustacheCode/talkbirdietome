@@ -1,25 +1,50 @@
-import { prisma } from "../src/db.js";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 beforeAll(async () => {
-    // Clean DB
-    await prisma.round.deleteMany();
+    await prisma.$transaction([
+        prisma.round.deleteMany(),
+        prisma.user.deleteMany(),
+    ]);
+
+    // Seed users
+    const user = await prisma.user.create({
+        data: {
+            id: 1,
+            email: "user@example.com",
+            role: "user",
+            passwordHash: "test-hash",
+        },
+    });
+
+    const admin = await prisma.user.create({
+        data: {
+            id: 2,
+            email: "admin@example.com",
+            role: "admin",
+            passwordHash: "test-hash",
+        },
+    });
 
     // Seed rounds
     await prisma.round.create({
-        id: 1,
         data: {
+            id: 1,
             totalScore: 70,
-            userId: "user-123",
+            scoreRelativeToPar: -2,
+            userId: user.id,
             courseName: "Test Course",
             datePlayed: new Date(),
         },
     });
 
     await prisma.round.create({
-        id: 999,
         data: {
+            id: 999,
             totalScore: 80,
-            userId: "other-user-999",
+            scoreRelativeToPar: 8,
+            userId: admin.id,
             courseName: "Other Course",
             datePlayed: new Date(),
         },
