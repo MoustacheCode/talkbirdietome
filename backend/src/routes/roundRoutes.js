@@ -1,5 +1,6 @@
 import { roundController } from "../controllers/roundController.js"; // Imports controller so it can be called in the routes
 import { verifySupabaseToken } from "../middleware/verifySupabaseToken.js"; // Imports the verifySupabaseToken middleware to protect routes
+import { loadRound } from "../middleware/loadRound.js"; // Imports the loadRound middleware to load a round by ID
 
 const roundRoutes = [
     {
