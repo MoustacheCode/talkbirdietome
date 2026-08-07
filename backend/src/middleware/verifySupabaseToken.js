@@ -2,10 +2,10 @@ import { createRemoteJWKSet, jwtVerify } from "jose";
 import Boom from "@hapi/boom";
 import { decodeJwt } from "jose";
 
-const isTestEnv = process.env.NODE_ENV === "test";
+const isLocalEnv = process.env.NODE_ENV !== "production";
 
 const JWKS =
-    !isTestEnv && process.env.SUPABASE_JWKS_URL
+    !isLocalEnv && process.env.SUPABASE_JWKS_URL
         ? createRemoteJWKSet(new URL(process.env.SUPABASE_JWKS_URL))
         : null;
 
@@ -19,7 +19,7 @@ export const verifySupabaseToken = async (request, h) => {
     const token = authHeader.substring(7);
 
     // Test mode to bypass Jose verification and use a simple secret for testing
-    if (isTestEnv) {
+    if (isLocalEnv) {
         try {
             const payload = decodeJwt(token);
 
@@ -33,6 +33,8 @@ export const verifySupabaseToken = async (request, h) => {
             throw Boom.unauthorized("Invalid Auth Token");
         }
     }
+
+    const JWKS = createRemoteJWKSet(new URL(process.env.SUPABASE_JWKS_URL));
 
     try {
         const { payload } = await jwtVerify(token, JWKS);
