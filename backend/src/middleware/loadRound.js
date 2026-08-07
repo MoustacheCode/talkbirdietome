@@ -1,4 +1,4 @@
-import { prisma } from "../prisma/client.js";
+import prisma from "../prisma/client.js";
 
 export async function loadRound(request, h) {
     const { id } = request.params;
