@@ -107,7 +107,7 @@ describe("Ownership checks", () => {
                 Authorization: `Bearer ${userToken}`,
             },
             payload: {
-                score: 72,
+                totalScore: 72,
             },
         });
 
@@ -135,7 +135,7 @@ describe("Ownership checks", () => {
                 Authorization: `Bearer ${userToken}`,
             },
             payload: {
-                score: 70,
+                totalScore: 70,
             },
         });
 
@@ -157,7 +157,7 @@ describe("Ownership checks", () => {
                 Authorization: `Bearer ${adminToken}`,
             },
             payload: {
-                score: 68,
+                totalScore: 68,
             },
         });
 
