@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-dotenv.config({ path: ".env.test" }); // Load test environment variables
+import path from "path";
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") }); // Load test environment variables
 import { server } from "../src/server.js";
 
 // Authentication block for testing the authentication middleware
