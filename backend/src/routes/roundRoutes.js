@@ -2,6 +2,7 @@ import { roundController } from "../controllers/roundController.js"; // Imports 
 import { verifySupabaseToken } from "../middleware/verifySupabaseToken.js"; // Imports the verifySupabaseToken middleware to protect routes
 import { loadRound } from "../middleware/loadRound.js"; // Imports the loadRound middleware to load a round by ID
 import { checkOwnership } from "../middleware/checkOwnership.js"; // Imports the checkOwnership middleware to verify user ownership of a round
+import { requireRole } from "../middleware/requireRole.js"; // Imports the requireRole middleware to enforce role-based access control
 
 const roundRoutes = [
     {
