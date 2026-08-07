@@ -1,6 +1,7 @@
 import { server } from "../src/server.js";
 import jwt from "jsonwebtoken";
 
+// Authentication block for testing the authentication middleware
 describe("Authentication", () => {
     it("rejects invalid tokens", async () => {
         const response = await server.inject({
