@@ -164,3 +164,75 @@ For this project, I have decided to use Google Authentication through Supabase, 
 ### Summary
 
 I chose Google Auth because it's secure, simple and perfect for getting a live app up and running quickly. It removes a lot of the complexity and lets me focus on building the core functionality of the project.
+
+## Authorisation & Ownership
+
+### Role based access (RBAC)
+
+Every user in the system has a role:
+
+- user - Standard access
+- admin - Full access
+
+I added a requireRole middleware so certain routes could be restricted to certain users. As an example, admin only routes now require the user role to be admin before the request allows them to continue, otherwise it will show an error 403. This keeps privileged actions protected.
+
+### Ownership checks
+
+It's important that normal users have the ability to update or delete their own rounds. To enforce this, I added two small middleware functions:
+
+- loadRound - Retrieves the round from the database
+- checkOwnership - Compares the logged in user to the round's owner
+
+Admins can bypass this check, but normal users must match the round owner. This will stop other users from modifying data they shouldn't be able to.
+
+### Authorisation flow diagram
+
+This diagram shows a journey of a request after a user logs in. Supabase proves who the user is, the backend checks what they're allowed to do, and ownership rules make sure users can only change their own data.
+
+<div align="center">
+
+<pre>
+┌──────────────────────────┐
+│      Google OAuth        │
+│  (User logs in via GCP)  │
+└──────────────┬───────────┘
+               ↓
+┌──────────────────────────┐
+│       Supabase Auth      │
+│ Issues JWT containing:   │
+│  - userId                │
+│  - email                 │
+│  - role (user/admin)     │
+└──────────────┬───────────┘
+               ↓
+┌──────────────────────────┐
+│  verifySupabaseToken     │
+│  - Validates JWT         │
+│  - Attaches auth info    │
+└──────────────┬───────────┘
+               ↓
+┌──────────────────────────┐
+│      requireRole         │
+│  - Admin-only routes     │
+│  - User-only routes      │
+└──────────────┬───────────┘
+               ↓
+┌──────────────────────────┐
+│       loadRound          │
+│  - Fetch round by ID     │
+│  - Attach to request     │
+└──────────────┬───────────┘
+               ↓
+┌──────────────────────────┐
+│     checkOwnership       │
+│  - User must own round   │
+│  - Admin bypasses        │
+└──────────────┬───────────┘
+               ↓
+┌──────────────────────────┐
+│       Controller         │
+│  - Update/Delete round   │
+└──────────────────────────┘
+</pre>
+
+</div>
