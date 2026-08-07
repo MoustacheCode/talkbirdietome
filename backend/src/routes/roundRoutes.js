@@ -33,7 +33,7 @@ const roundRoutes = [
             pre: [
                 { method: verifySupabaseToken },
                 { method: loadRound },
-                { method: checkOwnership() }
+                { method: checkOwnership() },
             ],
             payload: {
                 allow: "application/json", // Specifies that the payload should be in JSON format
@@ -47,9 +47,9 @@ const roundRoutes = [
         path: "/rounds/{id}",
         options: {
             pre: [
-                { method: verifySupabaseToken }
+                { method: verifySupabaseToken },
                 { method: loadRound },
-                { method: checkOwnership() }
+                { method: checkOwnership() },
             ],
         },
         handler: roundController.deleteRound, // Calls the deleteRound function from the controller
