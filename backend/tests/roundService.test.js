@@ -1,16 +1,31 @@
 import { jest } from "@jest/globals";
 
 // Mock Prisma client
-jest.unstable_mockModule("../src/prisma/client.js", () => ({
-    default: {
+jest.unstable_mockModule("../src/prisma/client.js", () => {
+    const mockTx = {
         round: {
-            findMany: jest.fn(),
             create: jest.fn(),
+            findUnique: jest.fn(),
             update: jest.fn(),
-            delete: jest.fn(),
         },
-    },
-}));
+        holeScore: {
+            createMany: jest.fn(),
+            upsert: jest.fn(),
+        },
+    };
+
+    return {
+        default: {
+            round: {
+                findMany: jest.fn(),
+                delete: jest.fn(),
+            },
+            // Mock transaction to immediately execute the callback with our mock transaction client
+            $transaction: jest.fn((callback) => callback(mockTx)),
+            _mockTx: mockTx, // Expose mock internal client references for isolated assertions
+        },
+    };
+});
 
 const prisma = (await import("../src/prisma/client.js")).default;
 const { roundService } = await import("../src/services/roundService.js");
@@ -20,27 +35,60 @@ const { roundService } = await import("../src/services/roundService.js");
 // Test for getAllRounds - Returns all the rounds from the database
 describe("roundService", () => {
     test("getAllRounds to return all rounds", async () => {
-        prisma.round.findMany.mockResolvedValue([{ id: 1, name: "Round 1" }]);
+        const expectedRounds = [
+            { id: 1, totalScore: 72, userId: 1, courseId: 1, teeId: 1 },
+        ];
+        prisma.round.findMany.mockResolvedValue(expectedRounds);
 
         const result = await roundService.getAllRounds();
 
-        expect(result).toEqual([{ id: 1, name: "Round 1" }]);
+        expect(result).toEqual(expectedRounds);
+        expect(prisma.round.findMany).toHaveBeenCalledWith({
+            include: {
+                course: true,
+                tee: true,
+                holeScores: {
+                    include: {
+                        hole: true,
+                    },
+                },
+            },
+        });
     });
 });
 
 // Test for createRound - Creates a new round in the database
 describe("roundService", () => {
     test("createRound to create new round", async () => {
-        const newRoundData = { name: "Round 2" };
-        const createdRound = { id: 2, name: "Round 2" };
+        const newRoundData = {
+            userId: 1,
+            courseId: 5,
+            teeId: 2,
+            datePlayed: "2026-04-15T00:00:00.000Z",
+            totalScore: 72,
+            scoreRelativeToPar: 0,
+            holeScores: [
+                { holeId: 10, strokes: 4 },
+                { holeId: 11, strokes: 3 },
+            ],
+        };
 
-        prisma.round.create.mockResolvedValue(createdRound);
+        const createdBaseRound = { id: 2, userId: 1, courseId: 5, teeId: 2 };
+        const fullyPopulatedRound = { ...createdBaseRound, holeScores: [] };
+
+        prisma._mockTx.round.create.mockResolvedValue(createdBaseRound);
+        prisma._mockTx.holeScore.createMany.mockResolvedValue({ count: 2 });
+        prisma._mockTx.round.findUnique.mockResolvedValue(fullyPopulatedRound);
 
         const result = await roundService.createRound(newRoundData);
 
-        expect(result).toEqual(createdRound);
-        expect(prisma.round.create).toHaveBeenCalledWith({
-            data: newRoundData,
+        expect(result).toEqual(fullyPopulatedRound);
+        expect(prisma._mockTx.round.create).toHaveBeenCalled();
+        expect(prisma._mockTx.holeScore.createMany).toHaveBeenCalledWith({
+            data: [
+                { roundId: 2, holeId: 10, strokes: 4, putts: null },
+                { roundId: 2, holeId: 11, strokes: 3, putts: null },
+            ],
         });
     });
 });
@@ -49,17 +97,25 @@ describe("roundService", () => {
 describe("roundService", () => {
     test("updateRound to update current round", async () => {
         const roundId = 1;
-        const updateData = { name: "Updated Round 1" };
-        const updatedRound = { id: 1, name: "Updated Round 1" };
+        const updateData = {
+            totalScore: 75,
+            holeScores: [{ holeId: 10, strokes: 5 }],
+        };
 
-        prisma.round.update.mockResolvedValue(updatedRound);
+        const updatedFullRound = { id: 1, totalScore: 75, holeScores: [] };
+
+        prisma._mockTx.holeScore.upsert.mockResolvedValue({});
+        prisma._mockTx.round.update.mockResolvedValue(updatedFullRound);
 
         const result = await roundService.updateRound(roundId, updateData);
 
-        expect(result).toEqual(updatedRound);
-        expect(prisma.round.update).toHaveBeenCalledWith({
-            where: { id: roundId },
-            data: updateData,
+        expect(result).toEqual(updatedFullRound);
+        expect(prisma._mockTx.holeScore.upsert).toHaveBeenCalledWith({
+            where: {
+                roundId_holeId: { roundId, holeId: 10 },
+            },
+            update: { strokes: 5, putts: null },
+            create: { roundId, holeId: 10, strokes: 5, putts: null },
         });
     });
 });
@@ -68,7 +124,7 @@ describe("roundService", () => {
 describe("roundService", () => {
     test("deleteRound to delete this round", async () => {
         const roundId = 1;
-        const deletedRound = { id: 1, name: "Round 1" };
+        const deletedRound = { id: 1, userId: 1 };
 
         prisma.round.delete.mockResolvedValue(deletedRound);
 

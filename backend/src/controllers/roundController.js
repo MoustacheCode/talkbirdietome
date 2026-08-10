@@ -58,8 +58,8 @@ export const roundController = {
         const data = { ...request.payload }; // Gets the payload from the request
 
         try {
-            // Recompute dynamic aggregates during active scorecard updates if adjustments are detected
-            if (Array.isArray(data.holeScores) && data.holeScores.length > 0) {
+            // Recalc dynamic aggregates during active scorecard updates if a full scorecard layout is detected
+            if (Array.isArray(data.holeScores) && data.holeScores.length >= 8) {
                 data.totalScore = data.holeScores.reduce(
                     (sum, item) => sum + (Number(item.strokes) || 0),
                     0,

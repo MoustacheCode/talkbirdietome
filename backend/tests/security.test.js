@@ -22,6 +22,20 @@ const checkAdminRole = (request, h) => {
     return h.continue;
 };
 
+// Mock round loading logic to simulate loadRound middleware behavior safely in isolation
+const mockLoadRoundMiddleware = (request, h) => {
+    const id = request.params.id;
+
+    // Dynamically simulate database records via clean request parameter detection
+    if (id === "999") {
+        request.round = { userId: "someone-else-id" };
+    } else if (id === "1") {
+        request.round = { userId: "1" }; // Matches sub "1" for the user token
+    }
+
+    return h.continue;
+};
+
 beforeAll(async () => {
     await server.initialize();
     server.route([
@@ -57,6 +71,7 @@ beforeAll(async () => {
                 ext: {
                     onPreHandler: [
                         { method: verifySupabaseToken },
+                        { method: mockLoadRoundMiddleware }, // Loads mock data before running ownership assertions
                         { method: checkOwnership() },
                     ],
                 },
@@ -166,17 +181,10 @@ describe("Ownership checks", () => {
             role: "user",
         });
 
-        server.ext("onPreAuth", (request, h) => {
-            if (request.path === "/test/security/rounds/999") {
-                request.round = { userId: "someone-else-id" };
-            }
-            return h.continue;
-        });
-
-        // Simulate a round that belongs to another user
+        // Simulate a round that belongs to another user using isolated parameter layouts
         const response = await server.inject({
             method: "PUT",
-            url: "/test/security/rounds/999", // Assuming round ID 999 belongs to another user
+            url: "/test/security/rounds/999",
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -198,14 +206,7 @@ describe("Ownership checks", () => {
             role: "user",
         });
 
-        server.ext("onPreAuth", (request, h) => {
-            if (request.path === "/test/security/rounds/1") {
-                request.round = { userId: "1" };
-            }
-            return h.continue;
-        });
-
-        // Simulate a round that belongs to the user
+        // Simulate a round that belongs to the user using matched key configurations
         const response = await server.inject({
             method: "PUT",
             url: "/test/security/rounds/1",
