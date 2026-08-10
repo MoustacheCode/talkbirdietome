@@ -290,3 +290,54 @@ To run the entire suite:
 4. Click Start Run
 
 You’ll get a full pass/fail report for all authentication and authorization scenarios.
+
+## Backend Refactor: Scorecard & Course Layout
+
+Initially this app was a very basic Score keeper, that I was going to import live data from an API for the course information. Upon further review, this was very limiting - Only allowing 5 requests per minute, and 200 per month.
+
+I ultimately decided to refactor the backend code, and utilise GolfAPI data to seed 14,000 courses across the united states as there is no available and free data for UK Courses.
+
+## Why I Upgraded the Data Models & Database
+
+### Fixing the Database Structure
+
+At first, my app only had two main tables: `User` and `Round`. This was fine for typing in a quick total score, but it wasn't a real golf app. I wanted users to be able to search for a real course, pick their tee color (like White or Red), and see a real scorecard automatically filled out with the right Par, Yardage, and Hole Numbers.
+
+To make that happen, I upgraded the database to follow the real world of golf:
+
+- **Club:** Saves the golf club name and state location so users can search for it.
+- **Course:** Handles different courses inside the same club.
+- **Tee:** Lets users choose which color tees they are playing from (Blue, White, Red).
+- **Hole:** Stores the layout for every single hole (Hole 1, Par 4, 387 Yards).
+- **HoleScore:** This is the new table that saves the actual scores the user shoots on each hole.
+
+### Making the Database Seeding 180x Faster
+
+I found a database file with over 14,000 real golf clubs. At first, my code was trying to save these clubs one by one, line by line. This forced the code to make over 64,000 separate connections to PostgreSQL! It took over 3 hours to get through part of the file and was constantly risking crashing my machine.
+
+I fixed this by changing the seed script to use **Batch Processing**. Instead of saving clubs one by one, the script now bundles them into groups of 1,000 in computer memory and saves them all at the exact same time using Prisma's `createMany` tool. Because of this, it now loops through all 14,023 courses and inserts **over 370,000 individual holes in just 66.1 seconds** without a single error.
+
+### Other Code Fixes Made Along the Way
+
+1. **Smarter Round Saving:** Updated my service files so that starting a round and logging individual hole scores happen safely together. If something breaks on one hole, the app safely stops the whole save so we don't get corrupted data.
+2. **Auto-Complete Search:** Created a brand new course search route. Now, when a user types into the search bar, it looks at both club names and states using case-insensitive matching to find courses instantly.
+3. **Automatic Math Calculations:** Moved the score calculations to the backend server. The app now adds up total strokes and score-relative-to-par automatically, saving my frontend from doing heavy math.
+4. **The Hidden "String vs. Number" Permission Bug:** My security middleware was locking me out with a 403 error. This happened because Supabase auth tokens save user IDs as text strings (`"1"`), but my PostgreSQL database saves user IDs as real numbers (`1`). Because a string is not strictly equal to a number in JavaScript, the app thought I was two different users! I fixed this by forcing both sides into matching numbers (`Number()`) before comparing them.
+
+## Updated Test Suite
+
+I updated the Test suite code so that the initial tests would run correctly:
+
+![UpdatedTestSuite](./assets/updatedAppTests.PNG)
+
+However, given I have yet to create a seperate test Database, running these tests at present wipes the current live Database. This is an issue that will need to be resolved in the near future. But as tests are currently passing, in order to keep up with the Schedule after losing time to make these changes, I have left this as it for now.
+
+## Updated Postman tests
+
+I ran a few Postman tests on Local Server in order to check the new database functions were working correctly. I was able to Search by region, Search by course name, POST a new round, and PUT changes relative to that round.
+
+![UpdatedPostman](./assets/updatedAppSearch.PNG)
+
+![UpdatedPostmanRegion](./assets/updatedAppSearchRegion.PNG)
+
+A new postman collection has also been added to reflect this.

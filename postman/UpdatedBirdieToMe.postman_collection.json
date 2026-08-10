@@ -1,0 +1,230 @@
+{
+  "info": {
+    "_postman_id": "e1d0aa97-5924-43fa-a33b-81dcb3f14b84",
+    "name": "UpdatedBirdieToMe",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54715787",
+    "_collection_link": "https://go.postman.co/collection/54715787-e1d0aa97-5924-43fa-a33b-81dcb3f14b84?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "searchRegion",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_1bqb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://0.0.0.0:8080/api/courses/search?q=CA",
+          "protocol": "http",
+          "host": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "courses",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "CA"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "searchSpecificClub",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_1bqb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://0.0.0.0:8080/api/courses/search?q=Egyptian",
+          "protocol": "http",
+          "host": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "courses",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "q",
+              "value": "Egyptian"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST round",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_1bqb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userId\": 1,\r\n    \"courseId\": 15090,\r\n    \"teeId\": 45268,\r\n    \"totalPar\": 64,\r\n    \"datePlayed\": \"2026-08-10T18:00:00.000Z\",\r\n    \"holeScores\": [\r\n        { \"holeId\": 503365, \"strokes\": 5 },\r\n        { \"holeId\": 503366, \"strokes\": 3 },\r\n        { \"holeId\": 503367, \"strokes\": 4 },\r\n        { \"holeId\": 503368, \"strokes\": 4 },\r\n        { \"holeId\": 503369, \"strokes\": 3 },\r\n        { \"holeId\": 503370, \"strokes\": 5 },\r\n        { \"holeId\": 503371, \"strokes\": 5 },\r\n        { \"holeId\": 503372, \"strokes\": 4 },\r\n        { \"holeId\": 503373, \"strokes\": 4 },\r\n        { \"holeId\": 503374, \"strokes\": 3 },\r\n        { \"holeId\": 503375, \"strokes\": 3 },\r\n        { \"holeId\": 503376, \"strokes\": 4 },\r\n        { \"holeId\": 503377, \"strokes\": 4 },\r\n        { \"holeId\": 503378, \"strokes\": 4 },\r\n        { \"holeId\": 503379, \"strokes\": 4 }\r\n    ]\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://0.0.0.0:8080/rounds",
+          "protocol": "http",
+          "host": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "port": "8080",
+          "path": [
+            "rounds"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT round update",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{supabase_service_role_api_key_1bqb}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"totalScore\": 65,            \r\n    \"scoreRelativeToPar\": 1,    \r\n    \"holeScores\": [\r\n        { \"holeId\": 503365, \"strokes\": 6 }\r\n    ]\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://0.0.0.0:8080/rounds/6",
+          "protocol": "http",
+          "host": [
+            "0",
+            "0",
+            "0",
+            "0"
+          ],
+          "port": "8080",
+          "path": [
+            "rounds",
+            "6"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_secret_1bqb}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "auth_secret_1bqb",
+      "secret": true
+    },
+    {
+      "key": "supabase_service_role_api_key_1bqb",
+      "secret": true
+    }
+  ]
+}
