@@ -8,32 +8,79 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-
 model Round {
-  id Int @id @default(autoincrement())      // Round ID
-  userId Int                                // User linked to round
-  user User @relation(fields: [userId], references: [id])
-  courseName String                         // Course played at
-  datePlayed DateTime                       // Date played
-  totalScore Int                            // Total round score
-  scoreRelativeToPar Int                    // How much over/under par
+  id                 Int      @id @default(autoincrement()) // Round ID
+  userId             Int // User linked to round
+  user               User     @relation(fields: [userId], references: [id])
+  teeId              Int
+  tee                Tee      @relation(fields: [teeId], references: [id]) // Course played at (updated to incorporate course search)
+  datePlayed         DateTime // Date played
+  totalScore         Int // Total round score
+  scoreRelativeToPar Int // How much over/under par
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
   passwordHash String
-  role String @default("user") // Temporarily a String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  role         String   @default("user") // Temporarily a String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
 
   rounds Round[]
+}
+
+model Club {
+  id        Int      @id @default(autoincrement())
+  name      String
+  region    String // Used for "search by region" feature
+  country   String   @default("United Kingdom")
+  courses   Course[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id        Int      @id @default(autoincrement())
+  name      String
+  clubId    Int
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  tees      Tee[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tee {
+  id        Int      @id @default(autoincrement())
+  color     String // e.g. White, Yellow, Red
+  totalPar  Int
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  holes     Hole[]
+  rounds    Round[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hole {
+  id          Int      @id @default(autoincrement())
+  holeNumber  Int
+  par         Int
+  strokeIndex Int
+  yards       Int
+  teeId       Int
+  tee         Tee      @relation(fields: [teeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // prevents accidentally adding duplicate hole numbers to the same tee box
+  @@unique([teeId, holeNumber])
 }
