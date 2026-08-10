@@ -8,32 +8,96 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("user")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  rounds       Round[]
+}
 
-model Round {
-  id Int @id @default(autoincrement())      // Round ID
-  userId Int                                // User linked to round
-  user User @relation(fields: [userId], references: [id])
-  courseName String                         // Course played at
-  datePlayed DateTime                       // Date played
-  totalScore Int                            // Total round score
-  scoreRelativeToPar Int                    // How much over/under par
-
+model Club {
+  id        Int      @id @default(autoincrement())
+  name      String
+  region    String // Used for "search by region" feature
+  country   String   @default("United Kingdom")
+  courses   Course[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  passwordHash String
-  role String @default("user") // Temporarily a String
+model Course {
+  id        Int      @id @default(autoincrement())
+  name      String
+  clubId    Int
+  club      Club     @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  tees      Tee[]
+  rounds    Round[] // Added for easier reverse lookups
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-  rounds Round[]
+model Tee {
+  id        Int      @id @default(autoincrement())
+  color     String // e.g. White, Yellow, Red
+  totalPar  Int
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  holes     Hole[]
+  rounds    Round[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hole {
+  id          Int         @id @default(autoincrement())
+  holeNumber  Int
+  par         Int
+  strokeIndex Int
+  yards       Int
+  teeId       Int
+  tee         Tee         @relation(fields: [teeId], references: [id], onDelete: Cascade)
+  holeScores  HoleScore[] // Added relation to player scores
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([teeId, holeNumber])
+}
+
+model Round {
+  id                 Int         @id @default(autoincrement())
+  userId             Int
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId           Int // Explicitly tracking the course played
+  course             Course      @relation(fields: [courseId], references: [id])
+  teeId              Int
+  tee                Tee         @relation(fields: [teeId], references: [id])
+  datePlayed         DateTime
+  totalScore         Int         @default(0) // Defaulting to 0 until round finishes
+  scoreRelativeToPar Int         @default(0)
+  holeScores         HoleScore[] // The actual scorecard entries for this round
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+}
+
+// This stores what the player actually shot!
+model HoleScore {
+  id         Int      @id @default(autoincrement())
+  roundId    Int
+  round      Round    @relation(fields: [roundId], references: [id], onDelete: Cascade)
+  holeId     Int
+  hole       Hole     @relation(fields: [holeId], references: [id], onDelete: Cascade)
+  strokes    Int // e.g., 4 strokes taken
+  putts      Int? // Optional: Track putts for future feature updates
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([roundId, holeId]) // Prevents entering a score for the same hole twice in one round
 }

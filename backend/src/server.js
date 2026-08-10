@@ -3,6 +3,8 @@ import Hapi from "@hapi/hapi";
 import dotenv from "dotenv";
 // Imports the round routes
 import roundRoutes from "./routes/roundRoutes.js";
+// Imports the course routes
+import { courseRoutes } from "./routes/courseRoutes.js";
 // Import auth middleware
 import { verifySupabaseToken } from "./middleware/verifySupabaseToken.js";
 
@@ -35,6 +37,9 @@ server.route({
 
 // Adds the round routes to the server
 server.route(roundRoutes);
+
+// Adds the course routes to the server
+server.route(courseRoutes);
 
 // Starts server and console log to show server is running unless in test environment
 if (process.env.NODE_ENV !== "test") {
