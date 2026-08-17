@@ -341,3 +341,5 @@ I ran a few Postman tests on Local Server in order to check the new database fun
 ![UpdatedPostmanRegion](./assets/updatedAppSearchRegion.PNG)
 
 A new postman collection has also been added to reflect this.
+
+---
