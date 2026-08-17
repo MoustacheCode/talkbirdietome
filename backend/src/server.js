@@ -5,6 +5,8 @@ import dotenv from "dotenv";
 import roundRoutes from "./routes/roundRoutes.js";
 // Imports the course routes
 import { courseRoutes } from "./routes/courseRoutes.js";
+import { authRoutes } from "./routes/authRoutes.js";
+import { teeRoutes } from "./routes/teeRoutes.js";
 // Import auth middleware
 import { verifySupabaseToken } from "./middleware/verifySupabaseToken.js";
 
@@ -40,6 +42,10 @@ server.route(roundRoutes);
 
 // Adds the course routes to the server
 server.route(courseRoutes);
+// add the auth routes to the server
+server.route(authRoutes);
+// adds the tee routes to the server
+server.route(teeRoutes);
 
 // Starts server and console log to show server is running unless in test environment
 if (process.env.NODE_ENV !== "test") {

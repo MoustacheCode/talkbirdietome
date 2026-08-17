@@ -42,4 +42,51 @@ export const courseController = {
                 .code(500);
         }
     },
+    // List all courses
+    getCourses: async (request, h) => {
+        try {
+            const courses = await prisma.course.findMany({
+                include: { club: true },
+            });
+            return h.response(courses).code(200);
+        } catch (error) {
+            console.error(error);
+            return h.response({ error: "Failed to fetch courses" }).code(500);
+        }
+    },
+    // Get course by ID
+    getCourseById: async (request, h) => {
+        const { id } = request.params;
+
+        try {
+            const course = await prisma.course.findUnique({
+                where: { id: Number(id) },
+                include: { club: true },
+            });
+
+            if (!course) {
+                return h.response({ message: "Course not found" }).code(404);
+            }
+
+            return h.response(course).code(200);
+        } catch (error) {
+            console.error(error);
+            return h.response({ error: "Failed to fetch course" }).code(500);
+        }
+    },
+    // Get tees for a course
+    getCourseTees: async (request, h) => {
+        const { id } = request.params;
+
+        try {
+            const tees = await prisma.tee.findMany({
+                where: { courseId: Number(id) },
+            });
+
+            return h.response(tees).code(200);
+        } catch (error) {
+            console.error(error);
+            return h.response({ error: "Failed to fetch tees" }).code(500);
+        }
+    },
 };

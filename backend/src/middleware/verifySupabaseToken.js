@@ -10,6 +10,11 @@ const JWKS =
         : null;
 
 export const verifySupabaseToken = async (request, h) => {
+    // Skip verification for routes that don't require authentication
+    if (request.route.settings.auth === false) {
+        return h.continue;
+    }
+
     const authHeader = request.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
